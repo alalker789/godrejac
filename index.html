@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="png" href="/snowflake.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Godrej Coldout — Because "Cool Home" Is Just Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  /* ══════════════════════════════════════════
+     LIGHT MODE — GODREJ BRAND SYSTEM
+  ══════════════════════════════════════════ */
+  :root {
+    /* Godrej brand purple — exact logo colour */
+    --brand-50:  #f8f0f6;
+    --brand-100: #efd9ea;
+    --brand-200: #d9add0;
+    --brand-300: #be7db4;
+    --brand-400: #a44f97;
+    --brand-500: #8b1874;   /* ← Primary Godrej purple */
+    --brand-600: #721260;
+    --brand-700: #580d4b;
+    --brand-800: #3d0934;
+    --brand-900: #240520;
+
+    /* Neutral greys */
+    --g50:  #f9fafb;
+    --g100: #f3f4f6;
+    --g200: #e5e7eb;
+    --g300: #d1d5db;
+    --g400: #9ca3af;
+    --g500: #6b7280;
+    --g600: #4b5563;
+    --g700: #374151;
+    --g800: #1f2937;
+    --g900: #111827;
+
+    /* Semantic tokens — these flip in dark mode */
+    --bg-page:    #ffffff;
+    --bg-subtle:  #f9fafb;
+    --bg-card:    #ffffff;
+    --bg-input:   #ffffff;
+    --border:     #e5e7eb;
+    --border-subtle: #f3f4f6;
+    --text-primary:  #111827;
+    --text-secondary:#4b5563;
+    --text-muted:    #9ca3af;
+    --text-inverse:  #ffffff;
+
+    /* Always-dark sections (quote band, footer) */
+    --bg-dark-section: #111827;
+    --text-dark-section: #ffffff;
+    --text-dark-muted:   rgba(255,255,255,0.55);
+
+    /* Badges — light mode */
+    --badge-red-bg:    #fce7f3;
+    --badge-red-text:  #9d174d;
+    --badge-amber-bg:  #fef3c7;
+    --badge-amber-text:#92400e;
+    --badge-ghost-bg:  #f3f4f6;
+    --badge-ghost-text:#6b7280;
+  }
+
+  /* ══════════════════════════════════════════
+     DARK MODE — semantic overrides only
+  ══════════════════════════════════════════ */
+  html.dark {
+    --bg-page:    #0d1117;
+    --bg-subtle:  #161b22;
+    --bg-card:    #1a2130;
+    --bg-input:   #1a2130;
+    --border:     #2d3748;
+    --border-subtle: #243040;
+    --text-primary:  #f0f4f8;
+    --text-secondary:#a8b8cc;
+    --text-muted:    #6b7a8d;
+    --text-inverse:  #f0f4f8;
+
+    /* Badges — dark mode */
+    --badge-red-bg:    rgba(139,24,116,0.2);
+    --badge-red-text:  #d4a0c8;
+    --badge-amber-bg:  rgba(146,64,14,0.2);
+    --badge-amber-text:#fbbf24;
+    --badge-ghost-bg:  #243040;
+    --badge-ghost-text:#a8b8cc;
+
+    /* Brand tints adjust for dark bg */
+    --brand-50:  #1e0a1a;
+    --brand-100: #2e1028;
+    --brand-200: #4a1a3e;
+  }
+
+  /* ── GLOBAL TRANSITIONS ── */
+  *, *::before, *::after {
+    margin: 0; padding: 0; box-sizing: border-box;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Don't transition transforms / opacity (breaks animations) */
+  *:not(.timeline-item):not(.review-card):not(.fade-in) {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    overflow-x: hidden;
+  }
+
+  /* ── DARK TOGGLE BUTTON ── */
+  .theme-toggle {
+    display: flex; align-items: center;
+    width: 46px; height: 26px;
+    background: var(--g200);
+    border-radius: 100px; border: none; cursor: pointer;
+    position: relative; flex-shrink: 0; margin-left: 10px;
+    transition: background 0.3s ease;
+  }
+  html.dark .theme-toggle { background: var(--g700); }
+  .theme-toggle:hover { opacity: 0.85; }
+  .theme-toggle .thumb {
+    position: absolute; left: 4px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--bg-page);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; line-height: 1;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  html.dark .theme-toggle .thumb { transform: translateX(20px); }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: color-mix(in srgb, var(--bg-page) 92%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0 2rem; height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 2px;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--brand-500); }
+
+  .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--brand-500);
+    animation: pulse-dot 1.8s infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100% { transform:scale(1); opacity:1; }
+    50% { transform:scale(1.6); opacity:0.5; }
+  }
+
+  .nav-links { display: flex; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-muted);
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.6px;
+    padding: 8px 13px; transition: color 0.2s;
+    text-transform: uppercase;
+  }
+  .nav-links a:hover { color: var(--brand-500); }
+
+  .nav-toggle {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 5px;
+  }
+  .nav-toggle span {
+    display: block; width: 24px; height: 2px;
+    background: var(--text-primary); border-radius: 2px;
+    transition: background 0.3s;
+  }
+
+  /* ── MOBILE MENU ── */
+  .mobile-menu {
+    display: none; position: fixed;
+    top: 60px; left: 0; right: 0;
+    background: var(--bg-page); z-index: 99;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .mobile-menu.open { display: block; }
+  .mobile-menu a {
+    display: block; padding: 12px 16px;
+    text-decoration: none; color: var(--text-secondary);
+    font-size: 0.9rem; font-weight: 500;
+    border-radius: 8px; transition: background 0.2s, color 0.2s;
+  }
+  .mobile-menu a:hover { background: var(--brand-50); color: var(--brand-500); }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--brand-500); color: #fff;
+    padding: 10px 0; overflow: hidden;
+    margin-top: 60px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .ticker-track {
+    display: flex;
+    animation: ticker-scroll 30s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-track span { padding: 0 40px; }
+  .ticker-track .sep { opacity: 0.45; }
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--brand-50) 0%, var(--bg-page) 50%, var(--bg-subtle) 100%);
+    min-height: calc(100vh - 80px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 80px 2rem 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '❄'; position: absolute; top: 10%; right: 8%;
+    font-size: 8rem; opacity: 0.05;
+    animation: float 6s ease-in-out infinite;
+  }
+  .hero::after {
+    content: '🌡'; position: absolute; bottom: 15%; left: 6%;
+    font-size: 6rem; opacity: 0.05;
+    animation: float 8s ease-in-out infinite reverse;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50%     { transform: translateY(-20px) rotate(5deg); }
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--brand-100); color: var(--brand-600);
+    padding: 6px 18px; border-radius: 100px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 2rem;
+    border: 1px solid var(--brand-200);
+    animation: fadeInUp 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 8vw, 6.5rem);
+    font-weight: 900; line-height: 1.05;
+    color: var(--text-primary);
+    animation: fadeInUp 0.6s ease 0.1s both;
+    margin-bottom: 0.3rem;
+  }
+  .hero h1 .strike { text-decoration: line-through; color: var(--text-muted); }
+  .hero h1 .accent {
+    color: var(--brand-500); display: inline-block;
+    animation: bounceIn 0.8s ease 0.7s both;
+  }
+  @keyframes bounceIn {
+    0%  { transform: scale(0.3); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100%{ transform: scale(1);   opacity: 1; }
+  }
+
+  .hero-sub {
+    max-width: 580px; margin: 1.5rem auto 0;
+    font-size: 1.05rem; color: var(--text-secondary); line-height: 1.75;
+    animation: fadeInUp 0.6s ease 0.3s both;
+  }
+
+  .hero-stats {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    justify-content: center; margin-top: 3rem;
+    animation: fadeInUp 0.6s ease 0.5s both;
+  }
+  .stat { text-align: center; }
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; line-height: 1;
+    color: var(--brand-500);
+  }
+  .stat-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ── SECTION BASICS ── */
+  section { padding: 84px 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.68rem; font-weight: 800; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--brand-500);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900; line-height: 1.1;
+    color: var(--text-primary); margin-bottom: 1.2rem;
+  }
+  .section-desc {
+    font-size: 1.05rem; color: var(--text-secondary);
+    max-width: 560px; line-height: 1.75; margin-bottom: 3rem;
+  }
+
+  @keyframes fadeInUp {
+    0%   { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TIMELINE ── */
+  .timeline-section { background: var(--bg-page); }
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--brand-300), var(--brand-100));
+    border-radius: 2px;
+  }
+
+  .timeline-item {
+    position: relative; margin-bottom: 2.5rem;
+    padding-left: 2rem;
+    opacity: 0; transform: translateX(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .timeline-item.visible { opacity: 1; transform: translateX(0); }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -2.5rem; top: 8px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--brand-400);
+    border: 3px solid var(--bg-page);
+    box-shadow: 0 0 0 2px var(--brand-200);
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .timeline-item.bad::before    { background: var(--brand-500); }
+  .timeline-item.neutral::before{ background: var(--g400); }
+
+  .tl-date {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;
+  }
+  .tl-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 6px;
+  }
+  .tl-body {
+    font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;
+    max-width: 640px;
+  }
+  .tl-badge {
+    display: inline-block; margin-top: 10px;
+    padding: 3px 12px; border-radius: 100px;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .badge-broken { background: var(--badge-red-bg);   color: var(--badge-red-text); }
+  .badge-promise{ background: var(--badge-amber-bg); color: var(--badge-amber-text); }
+  .badge-ghost  { background: var(--badge-ghost-bg); color: var(--badge-ghost-text); }
+  .badge-still  { background: var(--badge-red-bg);   color: var(--badge-red-text); }
+
+  /* ── SERVICE CARDS ── */
+  .services-section { background: var(--bg-subtle); }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.75rem;
+    position: relative; overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-300), var(--brand-500));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .card:hover { border-color: var(--brand-200); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(139,24,116,0.12); }
+  .card:hover::after { transform: scaleX(1); }
+  .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 0.6rem;
+  }
+  .card-body { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; }
+  .card-tag {
+    display: inline-block; margin-top: 1rem;
+    padding: 3px 12px; border-radius: 100px;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    background: var(--brand-50); color: var(--brand-500);
+    border: 1px solid var(--brand-100);
+  }
+
+  /* ── CEO LETTER ── */
+  .letter-section {
+    background: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-700) 100%);
+    color: #fff; text-align: center; padding: 80px 2rem;
+  }
+  .letter-section .section-label { color: rgba(255,255,255,0.65); }
+  .letter-section .section-title { color: #fff; }
+  .letter-section > div > p { color: rgba(255,255,255,0.75); font-size: 1rem; margin-bottom: 2.5rem; }
+
+  .letter-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px; padding: 2.5rem;
+    max-width: 720px; margin: 0 auto;
+    text-align: left; backdrop-filter: blur(4px);
+  }
+  .letter-card p {
+    font-size: 0.95rem; line-height: 1.85;
+    color: rgba(255,255,255,0.88); margin-bottom: 1.25rem;
+  }
+  .letter-card p strong { color: #fff; }
+  .letter-sig { margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1.25rem; }
+  .letter-sig strong { font-size: 1rem; color: #fff; display: block; }
+  .letter-sig span { font-size: 0.78rem; color: rgba(255,255,255,0.55); }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-section { background: var(--bg-page); }
+  .compare-table {
+    width: 100%; border-collapse: collapse;
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.07);
+  }
+  .compare-table th {
+    padding: 16px 20px; text-align: left;
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .compare-table th:first-child  { background: var(--g800); color: #fff; }
+  .compare-table th:nth-child(2) { background: var(--bg-subtle); color: var(--text-secondary); }
+  .compare-table th:nth-child(3) { background: var(--brand-500); color: #fff; }
+
+  html.dark .compare-table th:first-child { background: #0d1117; }
+
+  .compare-table td {
+    padding: 14px 20px; font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .compare-table td:first-child { font-weight: 600; color: var(--text-primary); background: var(--bg-subtle); }
+  .compare-table td:nth-child(2){ color: var(--text-secondary); background: var(--bg-page); }
+  .compare-table td:nth-child(3){ color: var(--brand-500); font-style: italic; background: var(--bg-page); }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* ── REVIEWS ── */
+  .reviews-section { background: var(--bg-subtle); }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .review-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .review-card.visible { opacity: 1; transform: translateY(0); }
+  .review-card:hover { border-color: var(--brand-200); box-shadow: 0 8px 24px rgba(139,24,116,0.1); }
+
+  .review-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .review-badge {
+    font-size: 0.63rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--brand-500); background: var(--brand-50);
+    padding: 3px 10px; border-radius: 100px; border: 1px solid var(--brand-100);
+  }
+  .review-stars { color: #f59e0b; font-size: 0.9rem; }
+  .review-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 0.5rem;
+  }
+  .review-body { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.7; font-style: italic; }
+  .review-author {
+    margin-top: 1rem; padding-top: 0.75rem;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.8rem; font-weight: 600; color: var(--text-primary);
+  }
+  .review-author span { color: var(--text-muted); font-weight: 400; }
+
+  /* ── DICTIONARY ── */
+  .dict-section { background: var(--bg-page); }
+  .dict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .dict-item {
+    padding: 1.5rem;
+    border-left: 3px solid var(--brand-200);
+    transition: border-color 0.2s;
+  }
+  .dict-item:hover { border-color: var(--brand-500); }
+  .dict-key {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; color: var(--brand-500); margin-bottom: 4px;
+  }
+  .dict-official { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-bottom: 8px; }
+  .dict-actual   { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; }
+
+  /* ── FIX IT ── */
+  .fix-section { background: var(--brand-50); }
+  html.dark .fix-section { background: var(--bg-subtle); }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .step-card {
+    background: var(--bg-card);
+    border: 1px solid var(--brand-100);
+    border-radius: 16px; padding: 1.75rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  html.dark .step-card { border-color: var(--border); }
+  .step-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(139,24,116,0.12); }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; line-height: 1; margin-bottom: 0.5rem;
+    color: var(--brand-200);
+  }
+  html.dark .step-num { color: var(--brand-700); }
+  .step-title { font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1rem; }
+  .step-body  { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; }
+
+  /* ── QUOTE BAND — always dark ── */
+  .quote-band {
+    background: #0f1520; color: #fff;
+    padding: 64px 2rem; text-align: center;
+  }
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 4vw, 2.5rem);
+    font-weight: 700; line-height: 1.45; max-width: 800px;
+    margin: 0 auto 1rem; color: #fff;
+  }
+  .quote-text em { color: var(--brand-300); font-style: normal; }
+  .quote-source  { font-size: 0.8rem; color: rgba(255,255,255,0.45); letter-spacing: 1px; }
+
+  /* ── COUNTER BAND ── */
+  .counter-band {
+    background: linear-gradient(135deg, var(--brand-50), var(--brand-100));
+    padding: 60px 2rem; text-align: center;
+  }
+  html.dark .counter-band {
+    background: linear-gradient(135deg, var(--brand-900), var(--brand-800));
+  }
+  .counter-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 20vw, 12rem);
+    color: var(--brand-500); line-height: 0.9; display: block;
+  }
+  .counter-label { font-size: 1.1rem; color: var(--text-secondary); margin-top: 1rem; }
+  .counter-sub   { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic; }
+
+  /* ── FOOTER — always dark ── */
+  footer {
+    background: #0f1520; color: #fff;
+    padding: 50px 2rem; text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 3px; margin-bottom: 1rem;
+    color: #fff;
+  }
+  .footer-logo span { color: var(--brand-300); }
+  .footer-disc {
+    font-size: 0.8rem; color: rgba(255,255,255,0.5); line-height: 1.85;
+    max-width: 680px; margin: 0 auto 1.5rem;
+  }
+  .footer-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem; color: rgba(255,255,255,0.35); font-style: italic;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-in {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease !important;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    .hero { padding: 60px 1.5rem 50px; }
+    .hero-stats { gap: 1.5rem; }
+    .stat-number { font-size: 2.4rem; }
+    .compare-table { font-size: 0.8rem; display: block; overflow-x: auto; }
+    section { padding: 60px 1.25rem; }
+    .timeline { padding-left: 1.5rem; }
+    .timeline-item { padding-left: 1.5rem; }
+    .timeline-item::before { left: -2rem; }
+    .letter-card { padding: 1.5rem; }
+  }
+</style>
+
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="nav-dot"></div>
+    godrej <span>coldout</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#ceo">CEO Letter</a></li>
+    <li><a href="#compare">Reality Check</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#dictionary">Dictionary</a></li>
+    <li><a href="#fix">Fix It</a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode">
+    <span class="thumb" id="themeThumb">☀️</span>
+  </button>
+  <div class="nav-toggle" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#timeline" onclick="toggleMenu()">Timeline</a>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#ceo" onclick="toggleMenu()">CEO Letter</a>
+  <a href="#compare" onclick="toggleMenu()">Reality Check</a>
+  <a href="#reviews" onclick="toggleMenu()">Reviews</a>
+  <a href="#dictionary" onclick="toggleMenu()">Dictionary</a>
+  <a href="#fix" onclick="toggleMenu()">How to Fix</a>
+</div>
+
+<!-- ── TICKER ── -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker">
+    <span>AC PURCHASED ✓</span>
+    <span class="sep">·</span>
+    <span>GAS LEAKED ✗</span>
+    <span class="sep">·</span>
+    <span>TECHNICIAN PROMISED ✓</span>
+    <span class="sep">·</span>
+    <span>TECHNICIAN ARRIVED ✗</span>
+    <span class="sep">·</span>
+    <span>DEFECT CONFIRMED ✓</span>
+    <span class="sep">·</span>
+    <span>DEFECT REPLACED ✗</span>
+    <span class="sep">·</span>
+    <span>CALLS MADE: 20+</span>
+    <span class="sep">·</span>
+    <span>CALLS ANSWERED: 0</span>
+    <span class="sep">·</span>
+    <span>DAYS WITHOUT COOLING: 41</span>
+    <span class="sep">·</span>
+    <span>AC PURCHASED ✓</span>
+    <span class="sep">·</span>
+    <span>GAS LEAKED ✗</span>
+    <span class="sep">·</span>
+    <span>TECHNICIAN PROMISED ✓</span>
+    <span class="sep">·</span>
+    <span>TECHNICIAN ARRIVED ✗</span>
+    <span class="sep">·</span>
+    <span>DEFECT CONFIRMED ✓</span>
+    <span class="sep">·</span>
+    <span>DEFECT REPLACED ✗</span>
+    <span class="sep">·</span>
+    <span>CALLS MADE: 20+</span>
+    <span class="sep">·</span>
+    <span>CALLS ANSWERED: 0</span>
+    <span class="sep">·</span>
+    <span>DAYS WITHOUT COOLING: 41</span>
+  </div>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="top">
+  <div class="hero-badge">★★★★★ A Premium Customer Experience ★★★★★</div>
+  <h1>
+    Your AC is<br>
+    <span class="strike">cooling</span>
+    <span class="accent"> defective.</span>
+  </h1>
+  <p class="hero-sub">
+    Welcome to Godrej Coldout — a love letter to India's most trusted home appliance brand,
+    where the only thing cooler than your ₹40,000 AC is the silence from their service team.
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-number" id="heroCounter">41</div>
+      <div class="stat-label">Days without cooling</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">2</div>
+      <div class="stat-label">Technicians visited</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">0</div>
+      <div class="stat-label">Problems Fixed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">Hollow Promises</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TIMELINE ── -->
+<section class="timeline-section" id="timeline">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">The Documented Horror</div>
+      <h2 class="section-title"><span id="timelineTitle">41</span> Days. Zero Cooling. One Epic Paper Trail.</h2>
+      <p class="section-desc">
+        What started as a simple AC purchase turned into a masterclass in how to gaslight a customer
+        while smiling. Every date. Every call. Every broken promise. Documented.
+      </p>
+    </div>
+
+    <div class="timeline">
+
+      <div class="timeline-item" data-delay="0">
+        <div class="tl-date">27 March 2026</div>
+        <div class="tl-title">The Purchase — Full of Hope, Empty of Caution</div>
+        <div class="tl-body">
+          Bought a brand new Godrej 3-Star 1.5-Ton AC. Paid full price. Brand new. Not second hand.
+          Not refurbished. New. With the naive belief that "new" means "works."
+          Spoiler: It does not.
+        </div>
+        <span class="tl-badge badge-promise">Investment Made</span>
+      </div>
+
+      <div class="timeline-item bad" data-delay="1">
+        <div class="tl-date">Late March – Early April 2026</div>
+        <div class="tl-title">Something Is Wrong. Very Wrong.</div>
+        <div class="tl-body">
+          The AC that was supposed to fight the 52°C Delhi heat decided it had other plans.
+          It wasn't cooling. A brand new appliance, installed days ago, already refusing to do its one job.
+          Calls begin. The odyssey starts.
+        </div>
+        <span class="tl-badge badge-broken">AC Not Cooling</span>
+      </div>
+
+      <div class="timeline-item bad" data-delay="2">
+        <div class="tl-date">10 April 2026</div>
+        <div class="tl-title">Technician Visit #1 — The Gas Gaslighting</div>
+        <div class="tl-body">
+          After enormous effort — multiple calls, follow-ups, probably some light begging — a technician
+          finally graced us with his presence. His diagnosis: <em>gas leakage and insufficient gas</em>.
+          A brand new AC. With a gas leak. His solution? "Kal ladka aake dal dega."
+          The gas man has no gas. Classic.
+        </div>
+        <span class="tl-badge badge-promise">Promise: "Will Fix Tomorrow"</span>
+      </div>
+
+      <div class="timeline-item bad" data-delay="3">
+        <div class="tl-date">11–12 April 2026</div>
+        <div class="tl-title">"Kal" Comes. "Ladka" Does Not.</div>
+        <div class="tl-body">
+          Tomorrow became the day after tomorrow. Then the day after that. The gas refill boy
+          who was "definitely coming" apparently got lost in a dimension where commitments don't exist.
+          More calls. More waiting. More hot nights.
+        </div>
+        <span class="tl-badge badge-ghost">Promise Evaporated</span>
+      </div>
+
+      <div class="timeline-item bad" data-delay="4">
+        <div class="tl-date">13 April 2026</div>
+        <div class="tl-title">Technician Visit #2 — The Plot Thickens</div>
+        <div class="tl-body">
+          After a heroic amount of calling and requesting, a second technician arrived.
+          This one had a different, worse diagnosis: <em>inner coil defect — manufacturing defect.</em>
+          Not user damage. Not installation error. A defect that left the factory and
+          got sealed inside a box sold as a new product. His response: "Ho jayega, par samay lagega."
+        </div>
+        <span class="tl-badge badge-broken">Manufacturing Defect Confirmed</span>
+      </div>
+
+      <div class="timeline-item neutral" data-delay="5">
+        <div class="tl-date">13 April – Present</div>
+        <div class="tl-title">The Long Wait — Patience as a Lifestyle</div>
+        <div class="tl-body">
+          We said okay. We asked for a full replacement — because why should a customer accept
+          a defective product that was literally brand new? The response was a masterpiece of
+          non-commitment: "It'll happen, but it takes time." Time. As if time heals coil defects.
+        </div>
+        <span class="tl-badge badge-promise">Replacement "Promised"</span>
+      </div>
+
+      <div class="timeline-item bad" data-delay="6">
+        <div class="tl-date">7 May 2026 — Today</div>
+        <div class="tl-title">Service Center Owner: Blocked. Shop Owner: Helpless.</div>
+        <div class="tl-body">
+          Today I tried calling the service center owner. Again. Except — he stopped answering.
+          The number that used to ring now goes unanswered. In all likelihood: blocked.
+          Visited the shop where the AC was purchased. They called him. His answer?
+          "Maine mail dala hai, par abhi tak revert nahi aaya. Main kaise karun?" 
+          You're paying ₹3,999/month for this kind of ambiguity. At least in summer.
+        </div>
+        <span class="tl-badge badge-still">Still. Not. Fixed.</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="services-section" id="services">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title">Premium Products,<br>Premium Negligence.</h2>
+      <p class="section-desc">
+        Godrej doesn't just manufacture appliances. They manufacture experiences.
+        Specifically, the experience of sweating in your own home while someone
+        somewhere "waits for a revert."
+      </p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card fade-in">
+        <div class="card-icon">🎰</div>
+        <div class="card-title">Diagnosis Roulette</div>
+        <div class="card-body">
+          First technician says gas leak. Second says coil defect. Both are right.
+          Neither fixes anything. Collect all diagnoses like Pokémon — 
+          except instead of catching them, you're just getting hotter.
+        </div>
+        <span class="card-tag">Auto-Ignored</span>
+      </div>
+
+      <div class="card fade-in">
+        <div class="card-icon">📅</div>
+        <div class="card-title">The "Kal" Guarantee</div>
+        <div class="card-body">
+          Our technicians will definitely fix it tomorrow. "Kal" is a Sanskrit word
+          meaning both "yesterday" and "tomorrow," which explains a lot about our
+          service timelines. The third meaning is "never."
+        </div>
+        <span class="card-tag">Temporal Feature</span>
+      </div>
+
+      <div class="card fade-in">
+        <div class="card-icon">📧</div>
+        <div class="card-title">The Mail Sent Guarantee</div>
+        <div class="card-body">
+          Rest assured, a mail has been sent. To whom? Unknown. When? Sometime.
+          Response received? No. But the mail exists, and that's more than
+          your cooling does right now.
+        </div>
+        <span class="card-tag">Inbox Somewhere</span>
+      </div>
+
+      <div class="card fade-in">
+        <div class="card-icon">📱</div>
+        <div class="card-title">The Block Feature</div>
+        <div class="card-body">
+          When a customer calls too many times asking for basic accountability,
+          our service partners activate the Block Protocol™. 
+          Out of sight, out of complaint. Your problem didn't go away — 
+          but your ability to report it did.
+        </div>
+        <span class="card-tag">Premium Support</span>
+      </div>
+
+      <div class="card fade-in">
+        <div class="card-icon">🔧</div>
+        <div class="card-title">Defect Delivery Service</div>
+        <div class="card-body">
+          Why sell a working product when you can sell a defective one and
+          see if the customer notices? A manufacturing defect inside a sealed box
+          suggests we quality-checked the packaging, not the product. Very efficient.
+        </div>
+        <span class="card-tag">Quality Assured™</span>
+      </div>
+
+      <div class="card fade-in">
+        <div class="card-icon">🌡️</div>
+        <div class="card-title">Free Summer Body Programme</div>
+        <div class="card-body">
+          With no AC, you're forced to sweat naturally — a lifestyle choice
+          endorsed by no one. Think of the calories burned. Think of the character built.
+          Godrej: helping you achieve peak physical resilience, one broken coil at a time.
+        </div>
+        <span class="card-tag">Wellness Benefit</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CEO LETTER ── -->
+<section class="letter-section" id="ceo">
+  <div class="container fade-in">
+    <div class="section-label">A Message from Leadership</div>
+    <h2 class="section-title" style="color:white;">A Letter From Our<br>Completely Real CEO.</h2>
+    <p style="color:rgba(255,255,255,0.7);font-size:1rem;margin-bottom:2.5rem;">An internal memo that definitely exists and was definitely read.</p>
+
+    <div class="letter-card">
+      <p>Dear Valued Customer,</p>
+      <p>
+        First, let me assure you — we at Godrej hear you. We heard you on <strong>April 10th</strong>,
+        when our technician confirmed a gas leak. We heard you on <strong>April 13th</strong>,
+        when our second technician confirmed a manufacturing defect. We have in fact, built
+        an entire infrastructure dedicated to hearing you. <strong>Fixing things is a separate department, and they're on leave.</strong>
+      </p>
+      <p>
+        Some of you have expressed concern that we sold a defective product. This is a
+        misunderstanding. We didn't sell you a defective product — we sold you a working product
+        with a non-working inner coil. These are two separate things. Our defect rate is 0.1%.
+        Our replacement rate is a trade secret.
+      </p>
+      <p>
+        To those of you calling the service center 20 times: we appreciate your persistence.
+        It allows our partners to practice the advanced skill of not picking up the phone,
+        which keeps them humble and in touch with their inner peace.
+      </p>
+      <p>
+        Regarding the "kal ladka aake dal dega" promise — I want to clarify that "kal" is doing
+        a lot of heavy lifting in that sentence. Think of it as saying "I can eat up to 47 rotis."
+        Technically true. Practically meaningless. Legally airtight.
+      </p>
+      <p>
+        Thank you for continuing to pay your EMIs on time. We notice that part never seems to have technical difficulties.
+      </p>
+
+      <div class="letter-sig">
+        <strong>Chief Experience Officer*</strong>
+        <span>Godrej Appliances Ltd.</span><br>
+        <span style="font-size:0.72rem;opacity:0.6;">*"Experience" here refers to suffering, not expertise.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COUNTER ── -->
+<div class="counter-band">
+  <span class="counter-number" id="dayCounter">41</span>
+  <div class="counter-label">days since AC purchase. Still not cooling.</div>
+  <div class="counter-sub">(This counter increments daily — optimistically assuming they'll fix it someday.)</div>
+</div>
+
+<!-- ── COMPARISON ── -->
+<section class="compare-section" id="compare">
+  <div class="container fade-in">
+    <div class="section-label">Feature Comparison</div>
+    <h2 class="section-title">Godrej: What You Pay For<br>vs. What You Get.</h2>
+    <p class="section-desc">A side-by-side comparison that Godrej's marketing team hopes you never see.</p>
+
+    <div style="overflow-x:auto;border-radius:16px;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>What You're Promised</th>
+            <th>What You Actually Get</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cooling</td>
+            <td>Efficient 3-star cooling up to 1.5 tons</td>
+            <td>Room temperature air, aggressively</td>
+          </tr>
+          <tr>
+            <td>Gas</td>
+            <td>Factory-sealed refrigerant</td>
+            <td>Factory-unsealed refrigerant, apparently</td>
+          </tr>
+          <tr>
+            <td>Warranty</td>
+            <td>5 year comprehensive coverage</td>
+            <td>5 year of "we'll look into it"</td>
+          </tr>
+          <tr>
+            <td>Technician</td>
+            <td>Expert diagnosis and repair</td>
+            <td>Google.com loading test + "kal aayega"</td>
+          </tr>
+          <tr>
+            <td>Service Time</td>
+            <td>48-hour resolution</td>
+            <td>48 hours to close ticket ≠ fix problem</td>
+          </tr>
+          <tr>
+            <td>Manufacturing QA</td>
+            <td>Zero-defect promise</td>
+            <td>One inner coil defect, confirmed by technician bhaiya</td>
+          </tr>
+          <tr>
+            <td>Customer Support</td>
+            <td>Responsive, always available</td>
+            <td>Unresponsive, hum ek aur ticket raise krr dete hai</td>
+          </tr>
+          <tr>
+            <td>Replacement</td>
+            <td>Immediate exchange for defective units</td>
+            <td>"Ho jayega, par samay lagega. Abhi upar se order nhi mila hai!"</td>
+          </tr>
+          <tr>
+            <td>Billing</td>
+            <td>One-time purchase, done</td>
+            <td>✓ Always works perfectly (suspicious, isn't it?)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── REVIEWS ── -->
+<section class="reviews-section" id="reviews">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Customer Love</div>
+      <h2 class="section-title">★★★★★ Reviews<br>Godrej Wishes Were Real.</h2>
+      <p class="section-desc">What customers would say if they were as delusional as Godrej's service tracking system.</p>
+    </div>
+
+    <div class="reviews-grid">
+
+      <div class="review-card">
+        <div class="review-meta">
+          <span class="review-badge">Verified Sufferer</span>
+          <span class="review-stars">★★☆☆☆</span>
+        </div>
+        <div class="review-title">Bought an AC, Got a Heater</div>
+        <div class="review-body">
+          "I purchased this AC in March in preparation for summer. It is now May.
+          I have experienced every season except cool. The AC runs. The room is hot.
+          Godrej confirmed it's 'working.' By their definition, so is a microwave pointed at me."
+        </div>
+        <div class="review-author">Anonymous Customer <span>· Delhi NCR</span></div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-meta">
+          <span class="review-badge">Verified Sufferer</span>
+          <span class="review-stars">★☆☆☆☆</span>
+        </div>
+        <div class="review-title">The Technician Was a Vibe, Not a Fix</div>
+        <div class="review-body">
+          "The technician arrived, opened his phone, confirmed google.com loads,
+          told me there's a manufacturing defect, and left saying 'samay lagega.'
+          He didn't bring tools. He didn't bring gas. He brought a diagnosis and left with my hope."
+        </div>
+        <div class="review-author">Meera S. <span>· Fiber Customer, Somehow</span></div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-meta">
+          <span class="review-badge">Verified Sufferer</span>
+          <span class="review-stars">★★★☆☆</span>
+        </div>
+        <div class="review-title">The Mail Sent. The Revert: Not Yet.</div>
+        <div class="review-body">
+          "The service center owner proudly told my shopkeeper that 'maine mail dala hai.'
+          This was presented as progress. The revert hasn't come. I don't know who received
+          the mail. I don't know if the mail exists. But somewhere in the universe, a mail was sent."
+        </div>
+        <div class="review-author">Rahul P. <span>· Customer since March</span></div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-meta">
+          <span class="review-badge">Verified Sufferer</span>
+          <span class="review-stars">★★☆☆☆</span>
+        </div>
+        <div class="review-title">3-Star Rating: For the AC, Not the Service</div>
+        <div class="review-body">
+          "I paid for a 3-star energy-efficient AC. It does not cool the room,
+          so technically it's saving enormous amounts of energy — the compressor barely
+          runs on refrigerant. Godrej has accidentally invented a green appliance."
+        </div>
+        <div class="review-author">Arjun M. <span>· Environmental Enthusiast, Involuntarily</span></div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-meta">
+          <span class="review-badge">Verified Sufferer</span>
+          <span class="review-stars">★☆☆☆☆</span>
+        </div>
+        <div class="review-title">My Service Center Owner: Ghost Mode Activated</div>
+        <div class="review-body">
+          "Calls made: 20+. Calls answered: declining. The service center owner
+          was very responsive until the second visit. Then he became a whisper.
+          Then a legend. Now a blocked number. He exists only in phone logs and regret."
+        </div>
+        <div class="review-author">Sneha R. <span>· Part-time Caller, Full-time Sufferer</span></div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-meta">
+          <span class="review-badge">Verified Sufferer</span>
+          <span class="review-stars">★★★☆☆</span>
+        </div>
+        <div class="review-title">Godrej Taught Me Patience Is a Lifestyle</div>
+        <div class="review-body">
+          "Godrej has taught me that patience is a virtue, helplessness is a lifestyle,
+          and 'resolved' is a state of mind rather than a state of my air conditioning.
+          10/10 spiritual experience. Would not recommend."
+        </div>
+        <div class="review-author">Rohit K. <span>· Has Memorised IVR Menu By Heart</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── QUOTE BAND ── -->
+<div class="quote-band">
+  <p class="quote-text">
+    "The only thing Godrej has never failed to deliver is <em>a bill.</em>"
+  </p>
+  <p class="quote-source">— Every Godrej customer, in unison, across India</p>
+</div>
+
+<!-- ── DICTIONARY ── -->
+<section class="dict-section" id="dictionary">
+  <div class="container fade-in">
+    <div class="section-label">The Godrej Dictionary</div>
+    <h2 class="section-title">What They Say vs.<br>What They Mean.</h2>
+    <p class="section-desc">A translation guide for navigating their customer service communication.</p>
+
+    <div class="dict-grid">
+      <div class="dict-item">
+        <div class="dict-key">"Kal Ladka Aayega"</div>
+        <div class="dict-official">Official: The technician will visit tomorrow.</div>
+        <div class="dict-actual">Actual: The gas cylinder is not in this dimension. Please hold for 3–72 business days. "Kal" is a flexible word.</div>
+      </div>
+
+      <div class="dict-item">
+        <div class="dict-key">"Manufacturing Defect"</div>
+        <div class="dict-official">Official: There is a defect in the product.</div>
+        <div class="dict-actual">Actual: This is confirmed. This is real. This changes nothing. The clock for "samay lagega" has just begun.</div>
+      </div>
+
+      <div class="dict-item">
+        <div class="dict-key">"Ho Jayega"</div>
+        <div class="dict-official">Official: It will be done.</div>
+        <div class="dict-actual">Actual: This is a deeply optimistic prediction about a future event whose timeline is controlled by no one you can contact.</div>
+      </div>
+
+      <div class="dict-item">
+        <div class="dict-key">"Maine Mail Dala Hai"</div>
+        <div class="dict-official">Official: I have escalated this.</div>
+        <div class="dict-actual">Actual: A mail was sent. A response may come. Your issue may be addressed. All three events remain independent probabilities.</div>
+      </div>
+
+      <div class="dict-item">
+        <div class="dict-key">"Warranty Coverage"</div>
+        <div class="dict-official">Official: We cover defects within warranty period.</div>
+        <div class="dict-actual">Actual: We cover defects by documenting them. Replacement happens on our timeline, which is measured in geological epochs.</div>
+      </div>
+
+      <div class="dict-item">
+        <div class="dict-key">"Samay Lagega"</div>
+        <div class="dict-official">Official: It will take some time.</div>
+        <div class="dict-actual">Actual: "Some time" is doing extraordinary heavy lifting here. We regret to inform you it has been outsourced to infinity.</div>
+      </div>
+
+      <div class="dict-item">
+        <div class="dict-key">"Premium Product"</div>
+        <div class="dict-official">Official: High-quality air conditioner.</div>
+        <div class="dict-actual">Actual: Premium packaging. Premium price. Premium coil defect. Premium silence from service. Premium everything — except cooling.</div>
+      </div>
+
+      <div class="dict-item">
+        <div class="dict-key">"Abhi Revert Nahi Aaya"</div>
+        <div class="dict-official">Official: We're awaiting a response.</div>
+        <div class="dict-actual">Actual: The mail entered a void. The void does not reply. We are all the void now. Especially your room at 3 PM in May.</div>
+      </div>
+
+      <div class="dict-item">
+        <div class="dict-key">"Gas Leakage"</div>
+        <div class="dict-official">Official: Technical issue requiring refill.</div>
+        <div class="dict-actual">Actual: A brand new AC has already failed. This is fine. The gas man has no gas. This is also fine. Come back tomorrow. Tomorrow is also fine.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FIX IT ── -->
+<section class="fix-section" id="fix">
+  <div class="container fade-in">
+    <div class="section-label">Actually Useful</div>
+    <h2 class="section-title">How to Actually Get<br>Your Issue Fixed.</h2>
+    <p class="section-desc">Since Godrej's own process clearly doesn't work, here's the real playbook. In order.</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Document Everything</div>
+        <div class="step-body">Save all SR numbers, dates of calls, names of technicians, and what was diagnosed. Screenshot every message. This paper trail is your weapon.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">Email Godrej Directly</div>
+        <div class="step-body">Email <strong>care@godrej.com</strong> with subject "Manufacturing Defect — Replacement Request." CC the regional office. Attach photos and all SR numbers.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">File on the National Consumer Helpline</div>
+        <div class="step-body">Register at <strong>consumerhelpline.gov.in</strong> or call 1915. This is a government portal — companies take it more seriously than their own inboxes.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-title">Social Media Pressure</div>
+        <div class="step-body">Post on Twitter/X tagging <strong>@GodrejAppliance</strong> with your SR number and timeline. Companies respond faster to public visibility than to private emails.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">05</div>
+        <div class="step-title">Consumer Forum</div>
+        <div class="step-body">File at your District Consumer Disputes Redressal Forum. Filing fee is minimal. Manufacturing defect on a new product is a strong, open-and-shut case.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">☢️</div>
+        <div class="step-title">Nuclear Option</div>
+        <div class="step-body">Build a satirical website. Document everything. Make it beautiful. Let the internet do the rest. You're looking at the result of that decision right now.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">godrej <span>coldout</span></div>
+  <p class="footer-disc">
+    This is a satirical website born from genuine, documented, verifiable customer frustration —
+    the kind that <span id="footerDays1">41</span> days of no cooling and 3 auto-resolved tickets produce. All events are real.
+    The pain is real. The suffering is real. The service center owner blocking the phone is real.
+    This site is not affiliated with Godrej Industries Ltd. — though at this point,
+    we've spent more time on their infrastructure failures than their own support team has.
+    <br><br>
+    <strong>To Godrej's legal team:</strong> If you'd like this site taken down,
+    may we suggest an alternative? Replace the AC.
+    This site goes dark the day the cooling starts. Ball's in your court.
+  </p>
+  <p class="footer-tagline">
+    Built with HTML, CSS, and <span id="footerDays2">41</span> days of unresolved frustration.<br>
+    godrej coldout — because optimism does not cool rooms.
+  </p>
+</footer>
+
+<script>
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Close menu on outside click
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('mobileMenu');
+    const toggle = document.querySelector('.nav-toggle');
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const delay = el.dataset.delay || 0;
+        setTimeout(() => {
+          el.classList.add('visible');
+        }, delay * 120);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  // Observe timeline items
+  document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
+
+  // Observe review cards
+  document.querySelectorAll('.review-card').forEach((el, i) => {
+    el.dataset.delay = i;
+    observer.observe(el);
+  });
+
+  // Observe fade-in elements
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        fadeObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+  // ── DAY COUNTER (auto-calculated from purchase date) ──
+  const PURCHASE_DATE = new Date('2026-03-27');
+
+  function getDaysSincePurchase() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const purchase = new Date(PURCHASE_DATE);
+    purchase.setHours(0, 0, 0, 0);
+    return Math.floor((today - purchase) / (1000 * 60 * 60 * 24));
+  }
+
+  // Update all static day references immediately on load
+  function initDays() {
+    const days = getDaysSincePurchase();
+    // Hero stat
+    const heroEl = document.getElementById('heroCounter');
+    if (heroEl) heroEl.textContent = days;
+    // Timeline section title
+    const tlEl = document.getElementById('timelineTitle');
+    if (tlEl) tlEl.textContent = days;
+    // Ticker spans
+    document.querySelectorAll('.ticker-track span').forEach(el => {
+      if (el.textContent.startsWith('DAYS WITHOUT COOLING:')) {
+        el.textContent = 'DAYS WITHOUT COOLING: ' + days;
+      }
+    });
+    // Footer references
+    const f1 = document.getElementById('footerDays1');
+    if (f1) f1.textContent = days;
+    const f2 = document.getElementById('footerDays2');
+    if (f2) f2.textContent = days;
+  }
+
+  initDays(); // run immediately
+
+  // Animate the big counter band number when it scrolls into view
+  function animateCounter() {
+    const el = document.getElementById('dayCounter');
+    const target = getDaysSincePurchase();
+    let current = 0;
+    const increment = Math.max(1, Math.ceil(target / 40));
+    const timer = setInterval(() => {
+      current = Math.min(current + increment, target);
+      el.textContent = current;
+      if (current >= target) clearInterval(timer);
+    }, 30);
+  }
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      animateCounter();
+      counterObserver.disconnect();
+    }
+  });
+  counterObserver.observe(document.querySelector('.counter-band'));
+
+  // Navbar shrink on scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+      nav.style.height = '52px';
+    } else {
+      nav.style.height = '60px';
+    }
+  });
+
+  // ── DARK MODE TOGGLE ──
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    document.getElementById('themeThumb').textContent = isDark ? '🌙' : '☀️';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
+
+  // Apply saved theme on load
+  (function () {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved === 'dark' || (!saved && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      const thumb = document.getElementById('themeThumb');
+      if (thumb) thumb.textContent = '🌙';
+    }
+  })();
+
+  // Duplicate ticker for seamless loop
+  const track = document.getElementById('ticker');
+  track.innerHTML += track.innerHTML;
+</script>
+</body>
+</html>
