@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="png" sizes="32x32" href="./snowflake.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Godrej Coldout — Because "Cool Home" Is Just Marketing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -210,7 +209,7 @@
   }
   .ticker-track {
     display: flex;
-    animation: ticker-scroll 8s linear infinite;
+    animation: ticker-scroll 30s linear infinite;
     white-space: nowrap;
   }
   .ticker-track span { padding: 0 40px; }
@@ -372,6 +371,27 @@
   .badge-promise{ background: var(--badge-amber-bg); color: var(--badge-amber-text); }
   .badge-ghost  { background: var(--badge-ghost-bg); color: var(--badge-ghost-text); }
   .badge-still  { background: var(--badge-red-bg);   color: var(--badge-red-text); }
+  .badge-resolved {
+    background: #d1fae5; color: #065f46;
+  }
+  html.dark .badge-resolved {
+    background: rgba(6,95,70,0.25); color: #6ee7b7;
+  }
+  .timeline-item.resolved::before {
+    background: #10b981;
+    box-shadow: 0 0 0 2px #a7f3d0;
+  }
+  html.dark .timeline-item.resolved::before {
+    box-shadow: 0 0 0 2px rgba(16,185,129,0.3);
+  }
+  /* resolution glow pulse */
+  .timeline-item.resolved::before {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+  @keyframes glow-pulse {
+    0%,100% { box-shadow: 0 0 0 2px #a7f3d0; }
+    50%      { box-shadow: 0 0 0 6px rgba(16,185,129,0.2); }
+  }
 
   /* ── SERVICE CARDS ── */
   .services-section { background: var(--bg-subtle); }
@@ -594,12 +614,7 @@
     font-family: 'Playfair Display', serif;
     font-size: 0.95rem; color: rgba(255,255,255,0.35); font-style: italic;
   }
-  /* SELECTIONS*/
-  ::selection {
-      background: var(--brand-300);
-      color: var(--g600);
-  }
-  
+
   /* ── SCROLL ANIMATIONS ── */
   .fade-in {
     opacity: 0; transform: translateY(24px);
@@ -706,24 +721,25 @@
   <h1>
     Your AC is<br>
     <span class="strike">cooling</span>
-    <span class="accent"> defective.</span>
+    <span class="accent"> broken.</span>
   </h1>
   <p class="hero-sub">
-    Welcome to Godrej Coldout — a love letter to India's most trusted home appliance brand,
-    where the only thing cooler than your ₹40,000 AC is the silence from their service team.
+    Welcome to Godrej Coldout — a documented record of 46 days without cooling after a manufacturing defect
+    in a brand-new AC. The unit was finally replaced on <strong>12 May 2026</strong>.
+    This site exists so others know: document everything, escalate relentlessly, and never silently accept a defective product.
   </p>
 
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-number" id="heroCounter">41</div>
-      <div class="stat-label">Days without cooling</div>
+      <div class="stat-number" id="heroCounter">46</div>
+      <div class="stat-label">Days suffered before fix</div>
     </div>
     <div class="stat">
-      <div class="stat-number">2</div>
+      <div class="stat-number">3</div>
       <div class="stat-label">Technicians visited</div>
     </div>
     <div class="stat">
-      <div class="stat-number">0</div>
+      <div class="stat-number">1</div>
       <div class="stat-label">Problems Fixed</div>
     </div>
     <div class="stat">
@@ -738,10 +754,10 @@
   <div class="container">
     <div class="fade-in">
       <div class="section-label">The Documented Horror</div>
-      <h2 class="section-title"><span id="timelineTitle">41</span> Days. Zero Cooling. One Epic Paper Trail.</h2>
+      <h2 class="section-title"><span id="timelineTitle">46</span> Days. One Defect. Finally Fixed.</h2>
       <p class="section-desc">
-        What started as a simple AC purchase turned into a masterclass in how to gaslight a customer
-        while smiling. Every date. Every call. Every broken promise. Documented.
+        What started as a simple AC purchase became a 46-day masterclass in how to gaslight a customer
+        while smiling. Every date. Every call. Every broken promise — and the one day it was finally resolved. Documented.
       </p>
     </div>
 
@@ -762,7 +778,7 @@
         <div class="tl-date">Late March – Early April 2026</div>
         <div class="tl-title">Something Is Wrong. Very Wrong.</div>
         <div class="tl-body">
-          The AC that was supposed to fight the 52°C Delhi heat decided it had other plans.
+          The AC that was supposed to fight the 45°C Delhi heat decided it had other plans.
           It wasn't cooling. A brand new appliance, installed days ago, already refusing to do its one job.
           Calls begin. The odyssey starts.
         </div>
@@ -816,7 +832,7 @@
       </div>
 
       <div class="timeline-item bad" data-delay="6">
-        <div class="tl-date">7 May 2026 — Today</div>
+        <div class="tl-date">7 May 2026</div>
         <div class="tl-title">Service Center Owner: Blocked. Shop Owner: Helpless.</div>
         <div class="tl-body">
           Today I tried calling the service center owner. Again. Except — he stopped answering.
@@ -826,6 +842,23 @@
           You're paying ₹3,999/month for this kind of ambiguity. At least in summer.
         </div>
         <span class="tl-badge badge-still">Still. Not. Fixed.</span>
+      </div>
+
+      <div class="timeline-item resolved" data-delay="7">
+        <div class="tl-date">12 May 2026 — Day 46 — The End</div>
+        <div class="tl-title">Resolution. Finally. After 46 Days.</div>
+        <div class="tl-body">
+          On the 46th day, after 2 technician visits, 20+ calls, 1 blocked number,
+          1 helpless shop owner, and 1 satirical website — a technician finally arrived
+          and replaced <em>both the inner and outer unit</em> of the AC. The cooling works.
+          The room is cold. The suffering is over.
+          <br><br>
+          46 days for a manufacturing defect to be fixed on a brand-new product.
+          Not because the system worked — because the pressure didn't stop.
+          This website documents why you should never silently accept a defective product.
+          Keep your SR numbers. Keep calling. Keep the receipts. It works.
+        </div>
+        <span class="tl-badge badge-resolved">✓ AC Replaced — Both Units</span>
       </div>
 
     </div>
@@ -963,8 +996,8 @@
 <!-- ── COUNTER ── -->
 <div class="counter-band">
   <span class="counter-number" id="dayCounter">41</span>
-  <div class="counter-label">days since AC purchase. Still not cooling.</div>
-  <div class="counter-sub">(This counter increments daily — optimistically assuming they'll fix it someday.)</div>
+  <div class="counter-label">days it took Godrej to fix a brand-new manufacturing defect.</div>
+  <div class="counter-sub">Fixed on 12 May 2026. Both inner & outer unit replaced. The AC now cools. The counter stopped.</div>
 </div>
 
 <!-- ── COMPARISON ── -->
@@ -996,8 +1029,8 @@
           </tr>
           <tr>
             <td>Warranty</td>
-            <td>5 year comprehensive coverage</td>
-            <td>5 year of "we'll look into it"</td>
+            <td>1 year comprehensive coverage</td>
+            <td>1 year of "we'll look into it"</td>
           </tr>
           <tr>
             <td>Technician</td>
@@ -1012,17 +1045,17 @@
           <tr>
             <td>Manufacturing QA</td>
             <td>Zero-defect promise</td>
-            <td>One inner coil defect, confirmed by technician bhaiya</td>
+            <td>One inner coil defect, confirmed on delivery</td>
           </tr>
           <tr>
             <td>Customer Support</td>
             <td>Responsive, always available</td>
-            <td>Unresponsive, hum ek aur ticket raise krr dete hai</td>
+            <td>Unresponsive, eventually blocked</td>
           </tr>
           <tr>
             <td>Replacement</td>
             <td>Immediate exchange for defective units</td>
-            <td>"Ho jayega, par samay lagega. Abhi upar se order nhi mila hai!"</td>
+            <td>"Ho jayega, par samay lagega."</td>
           </tr>
           <tr>
             <td>Billing</td>
@@ -1258,19 +1291,19 @@
 <footer>
   <div class="footer-logo">godrej <span>coldout</span></div>
   <p class="footer-disc">
-    This is a satirical website born from genuine, documented, verifiable customer frustration —
-    the kind that <span id="footerDays1">41</span> days of no cooling and 3 auto-resolved tickets produce. All events are real.
-    The pain is real. The suffering is real. The service center owner blocking the phone is real.
-    This site is not affiliated with Godrej Industries Ltd. — though at this point,
-    we've spent more time on their infrastructure failures than their own support team has.
+    This is a documented record of genuine, verifiable customer frustration —
+    <span id="footerDays1">46</span> days of no cooling after a confirmed manufacturing defect in a brand-new Godrej AC.
+    The AC was finally replaced on <strong style="color:var(--brand-300)">12 May 2026</strong> — both inner and outer units.
+    All events are real. The SR numbers are real. The service center owner blocking the phone was real.
+    This site is not affiliated with Godrej Industries Ltd.
     <br><br>
-    <strong>To Godrej's legal team:</strong> If you'd like this site taken down,
-    may we suggest an alternative? Replace the AC.
-    This site goes dark the day the cooling starts. Ball's in your court.
+    <strong>To Godrej's legal team:</strong> The AC has been replaced. This site stays up as a public record —
+    because 46 days to fix a manufacturing defect on a new product is not acceptable,
+    and others deserve to know how to fight back when the system fails them.
   </p>
   <p class="footer-tagline">
-    Built with HTML, CSS, and <span id="footerDays2">41</span> days of unresolved frustration.<br>
-    godrej coldout — because optimism does not cool rooms.
+    Built with HTML, CSS, and <span id="footerDays2">46</span> days of frustration — with a happy ending.<br>
+    godrej coldout — proof that persistence and documentation win.
   </p>
 </footer>
 
@@ -1324,20 +1357,19 @@
 
   document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
 
-  // ── DAY COUNTER (auto-calculated from purchase date) ──
-  const PURCHASE_DATE = new Date('2026-03-27');
+  // ── DAY COUNTER (fixed — AC resolved on 12 May 2026) ──
+  const PURCHASE_DATE   = new Date('2026-03-27');
+  const RESOLUTION_DATE = new Date('2026-05-12');
+  const DAYS_TO_FIX = 46; // March 27 → May 12 = 46 days
 
   function getDaysSincePurchase() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const purchase = new Date(PURCHASE_DATE);
-    purchase.setHours(0, 0, 0, 0);
-    return Math.floor((today - purchase) / (1000 * 60 * 60 * 24));
+    // Return fixed 46 — the AC is resolved, counter no longer grows
+    return DAYS_TO_FIX;
   }
 
   // Update all static day references immediately on load
   function initDays() {
-    const days = getDaysSincePurchase();
+    const days = DAYS_TO_FIX;
     // Hero stat
     const heroEl = document.getElementById('heroCounter');
     if (heroEl) heroEl.textContent = days;
@@ -1347,7 +1379,7 @@
     // Ticker spans
     document.querySelectorAll('.ticker-track span').forEach(el => {
       if (el.textContent.startsWith('DAYS WITHOUT COOLING:')) {
-        el.textContent = 'DAYS WITHOUT COOLING: ' + days;
+        el.textContent = 'DAYS TO FIX: ' + days + ' ✓ RESOLVED';
       }
     });
     // Footer references
@@ -1362,7 +1394,7 @@
   // Animate the big counter band number when it scrolls into view
   function animateCounter() {
     const el = document.getElementById('dayCounter');
-    const target = getDaysSincePurchase();
+    const target = DAYS_TO_FIX;
     let current = 0;
     const increment = Math.max(1, Math.ceil(target / 40));
     const timer = setInterval(() => {
